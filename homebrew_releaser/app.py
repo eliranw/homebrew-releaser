@@ -31,6 +31,7 @@ HOMEBREW_OWNER = os.getenv('INPUT_HOMEBREW_OWNER')
 
 # Optional GitHub Action env variables from user
 COMMIT_OWNER = os.getenv('INPUT_COMMIT_OWNER', 'homebrew-releaser')
+RELEASE_NAME = os.getenv('INPUT_RELEASE_NAME', '')
 COMMIT_EMAIL = os.getenv('INPUT_COMMIT_EMAIL', 'homebrew-releaser@example.com')
 DEPENDS_ON = os.getenv('INPUT_DEPENDS_ON')
 TEST = os.getenv('INPUT_TEST')
@@ -69,12 +70,18 @@ class App:
             url=f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}',
             stream=False,
         ).json()
-        tags = Utils.make_get_request(
-            url=f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}/tags',
-            stream=False,
-        ).json()
-        version = tags[0]['name']
-        version_no_v = version.replace('v', '')
+        if RELEASE_NAME == "":
+
+            tags = Utils.make_get_request(
+                url=f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}/tags',
+                stream=False,
+             ).json()
+            version = tags[0]['name']
+            version_no_v = version.replace('v', '')
+        else:
+            version = RELEASE_NAME
+            version_no_v = RELEASE_NAME
+
         logger.info(f'Latest release ({version}) successfully identified!')
 
         logger.info('Generating tar archive checksum(s)...')
