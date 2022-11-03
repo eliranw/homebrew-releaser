@@ -46,6 +46,9 @@ inputs:
   target_linux_arm64:
     description: "Add a custom URL/checksum target for ARM64 Linux builds."
     required: false
+  release_name:
+    description: "The name of the specific release to use."
+    required: false
   update_readme_table:
     description: "Update your homebrew tap's README with a table of all projects in the tap."
     required: false
@@ -63,6 +66,7 @@ runs:
     - ${{ inputs.homebrew_tap }}
     - ${{ inputs.formula_folder }}
     - ${{ inputs.github_token }}
+    - ${{ inputs.release_name }}
     - ${{ inputs.commit_owner }}
     - ${{ inputs.commit_email }}
     - ${{ inputs.install }}
